@@ -119,4 +119,8 @@ bankAccountRepository.save(bankAccount);
         credit(accountIdDestination,amount,"Transfer from "+accountIdSource);
 
     }
+    @Override
+    public List<BankAccount> bankAccountList(){
+        return bankAccountRepository.findAll();
+    }
 }
