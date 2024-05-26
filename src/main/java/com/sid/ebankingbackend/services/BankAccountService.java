@@ -1,5 +1,6 @@
 package com.sid.ebankingbackend.services;
 
+import com.sid.ebankingbackend.dtos.CustomerDTO;
 import com.sid.ebankingbackend.entites.BankAccount;
 import com.sid.ebankingbackend.entites.CurrentAccount;
 import com.sid.ebankingbackend.entites.Customer;
@@ -17,7 +18,7 @@ public interface BankAccountService {
      CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
      SavingAccount saveSavingCurrentBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
 
-     List<Customer> listCustomers();
+     List<CustomerDTO> listCustomers();
      BankAccount getBankAccount(String accountId) throws BankAccountNotFoundException;
      void debit(String accountId,double amount,String description) throws BankAccountNotFoundException, BlanceNotSufficentException;
 

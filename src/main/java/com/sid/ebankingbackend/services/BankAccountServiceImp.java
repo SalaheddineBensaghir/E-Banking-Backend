@@ -1,10 +1,12 @@
 package com.sid.ebankingbackend.services;
 
+import com.sid.ebankingbackend.dtos.CustomerDTO;
 import com.sid.ebankingbackend.entites.*;
 import com.sid.ebankingbackend.enums.OperationType;
 import com.sid.ebankingbackend.exception.BankAccountNotFoundException;
 import com.sid.ebankingbackend.exception.BlanceNotSufficentException;
 import com.sid.ebankingbackend.exception.CustomerNotFoundException;
+import com.sid.ebankingbackend.mappers.BankAccountMapperImpl;
 import com.sid.ebankingbackend.repositories.AccountOperationRepository;
 import com.sid.ebankingbackend.repositories.BankAccountRepository;
 import com.sid.ebankingbackend.repositories.CustomerRepository;
@@ -26,7 +28,7 @@ public class BankAccountServiceImp implements BankAccountService{
     private CustomerRepository customerRepository;
     private BankAccountRepository bankAccountRepository;
     private AccountOperationRepository accountOperationRepository;
-
+private BankAccountMapperImpl bankAccountMapper;
 
 
     @Override
@@ -69,8 +71,10 @@ CurrentAccount savedBankAccount= bankAccountRepository.save(currentAccount);
 
 
     @Override
-    public List<Customer> listCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDTO> listCustomers() {
+        List<Customer> customers= customerRepository.findAll();
+        customers.stream().map(customer -> bankAccountMapper.fromCustomer(customer))
+
     }
 
     @Override
