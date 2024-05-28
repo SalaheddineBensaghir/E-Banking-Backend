@@ -1,6 +1,9 @@
 package com.sid.ebankingbackend.services;
 
+import com.sid.ebankingbackend.dtos.BankAccountDTO;
+import com.sid.ebankingbackend.dtos.CurrentBankAccountDTO;
 import com.sid.ebankingbackend.dtos.CustomerDTO;
+import com.sid.ebankingbackend.dtos.SavingBankAccountDTO;
 import com.sid.ebankingbackend.entites.BankAccount;
 import com.sid.ebankingbackend.entites.CurrentAccount;
 import com.sid.ebankingbackend.entites.Customer;
@@ -15,17 +18,17 @@ import java.util.List;
 public interface BankAccountService {
 
      CustomerDTO saveCustomer (CustomerDTO customerDTO);
-     CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
-     SavingAccount saveSavingCurrentBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
+     CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
+     SavingBankAccountDTO saveSavingCurrentBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
 
      List<CustomerDTO> listCustomers();
-     BankAccount getBankAccount(String accountId) throws BankAccountNotFoundException;
+     BankAccountDTO getBankAccount(String accountId) throws BankAccountNotFoundException;
      void debit(String accountId,double amount,String description) throws BankAccountNotFoundException, BlanceNotSufficentException;
 
      void credit(String accountId,double amount,String description) throws BankAccountNotFoundException;
      void transfer(String accountIdSource,String accountIdDestination,double amount) throws BlanceNotSufficentException, BankAccountNotFoundException;
 
-     List<BankAccount> bankAccountList();
+     List<BankAccountDTO> bankAccountList();
 
      CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
 
