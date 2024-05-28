@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,14 +29,16 @@ public class BankAccountServiceImp implements BankAccountService{
     private CustomerRepository customerRepository;
     private BankAccountRepository bankAccountRepository;
     private AccountOperationRepository accountOperationRepository;
-private BankAccountMapperImpl bankAccountMapper;
+private BankAccountMapperImpl dtoMapper;
+
 
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
        log.info("Saving new Customer");
+       Customer customer=dtoMapper.fromCustomersDTO(customerDTO);
       Customer savedCustomer =  customerRepository.save(customer);
-        return savedCustomer;
+        return dtoMapper.fromCustomer(savedCustomer);
     }
 
     @Override
@@ -73,8 +76,16 @@ CurrentAccount savedBankAccount= bankAccountRepository.save(currentAccount);
     @Override
     public List<CustomerDTO> listCustomers() {
         List<Customer> customers= customerRepository.findAll();
-        customers.stream().map(customer -> bankAccountMapper.fromCustomer(customer))
+        List<CustomerDTO> customerDTOS = customers.stream()
+                .map(customer -> dtoMapper.fromCustomer(customer))
+                .collect(Collectors.toList());
 
+//        List<CustomerDTO> customerDTOS = new ArrayList<>();
+//        for (Customer customer:customers){
+//           CustomerDTO customerDTO=dtoMapper.fromCustomer(customer);
+        //CustomerDTOS.add(customerDTO).
+//        }
+        return customerDTOS;
     }
 
     @Override
@@ -127,4 +138,23 @@ bankAccountRepository.save(bankAccount);
     public List<BankAccount> bankAccountList(){
         return bankAccountRepository.findAll();
     }
+@Override
+    public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer Not found"));
+        return dtoMapper.fromCustomer(customer);
+    }
+
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        log.info("Saving new Customer");
+        Customer customer=dtoMapper.fromCustomersDTO(customerDTO);
+        Customer savedCustomer =  customerRepository.save(customer);
+        return dtoMapper.fromCustomer(savedCustomer);
+    }
+@Override
+    public void deleteCustomer(Long customerId){
+        customerRepository.deleteById(customerId);
+    }
+
 }
