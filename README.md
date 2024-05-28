@@ -16,5 +16,7 @@
 <img src="Image/consulter account.png"/>
 <h4>Consulter account : </h4>
 <img src="Image/consulter un  acounts.png"/>
+<h4>Consulter Operations account : </h4>
+<img src="Image/consuter operation account.png"/>
 <h4>Consulter History Operations account avec pagination : </h4>
 <img src="Image/HistoryOperation.png"/>
