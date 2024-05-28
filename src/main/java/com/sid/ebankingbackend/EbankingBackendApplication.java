@@ -50,27 +50,27 @@ bankAccountService.listCustomers().forEach(customer -> {
     try {
         bankAccountService.saveCurrentBankAccount(Math.random()*9000,9000,customer.getId());
 bankAccountService.saveSavingCurrentBankAccount(Math.random()*120000,5.5, customer.getId());
+
+    } catch (CustomerNotFoundException e) {
+e.printStackTrace();
+
+    }
+});
         List<BankAccountDTO> bankAccounts=bankAccountService.bankAccountList();
         for (BankAccountDTO bankAccount:bankAccounts) {
             for (int i = 0; i < 10; i++) {
                 String accountId;
                 if(bankAccount instanceof SavingBankAccountDTO){
-accountId=((SavingBankAccountDTO) bankAccount).getId();
+                    accountId=((SavingBankAccountDTO) bankAccount).getId();
                 }else {
                     accountId=((CurrentBankAccountDTO) bankAccount).getId();
 
                 }
-                bankAccountService.credit(accountId, 10000+Math.random()*120000,"Credit");
-bankAccountService.debit(accountId,1000+Math.random()*9000,"Debit");
+                bankAccountService.credit(accountId,10000+Math.random()*120000,"Credit");
+                bankAccountService.debit(accountId,1000+Math.random()*9000,"Debit");
             }
-            
+
         }
-    } catch (CustomerNotFoundException e) {
-e.printStackTrace();
-    } catch (BankAccountNotFoundException | BlanceNotSufficentException e) {
-e.printStackTrace();
-    }
-});
         };
     }
 

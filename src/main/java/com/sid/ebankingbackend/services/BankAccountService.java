@@ -1,9 +1,6 @@
 package com.sid.ebankingbackend.services;
 
-import com.sid.ebankingbackend.dtos.BankAccountDTO;
-import com.sid.ebankingbackend.dtos.CurrentBankAccountDTO;
-import com.sid.ebankingbackend.dtos.CustomerDTO;
-import com.sid.ebankingbackend.dtos.SavingBankAccountDTO;
+import com.sid.ebankingbackend.dtos.*;
 import com.sid.ebankingbackend.entites.BankAccount;
 import com.sid.ebankingbackend.entites.CurrentAccount;
 import com.sid.ebankingbackend.entites.Customer;
@@ -18,7 +15,11 @@ import java.util.List;
 public interface BankAccountService {
 
      CustomerDTO saveCustomer (CustomerDTO customerDTO);
+//     CurrentBankAccountDTO saveCurrentBankAccount(Long customerId,double initialBalance, double overDraft) throws CustomerNotFoundException;
+//     SavingBankAccountDTO saveSavingCurrentBankAccount(Long customerId,double initialBalance, double interestRate) throws CustomerNotFoundException;
+
      CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
+
      SavingBankAccountDTO saveSavingCurrentBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
 
      List<CustomerDTO> listCustomers();
@@ -35,4 +36,8 @@ public interface BankAccountService {
      CustomerDTO updateCustomer(CustomerDTO customerDTO);
 
      void deleteCustomer(Long customerId);
+
+     List<AccountOperationDTO> accountHistory(String accountId);
+
+     AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
 }

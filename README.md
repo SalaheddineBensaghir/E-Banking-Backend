@@ -12,3 +12,9 @@
 <img src="Image/modifier.png"/>
 <h4>Supprimer un customers: </h4>
 <img src="Image/delete.png"/>
+<h4>Consulter tout les accounts: </h4>
+<img src="Image/consulter account.png"/>
+<h4>Consulter account : </h4>
+<img src="Image/consulter un  acounts.png"/>
+<h4>Consulter History Operations account avec pagination : </h4>
+<img src="Image/HistoryOperation.png"/>
