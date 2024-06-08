@@ -193,9 +193,9 @@ List<AccountOperationDTO> accountOperationDTOS= accountOperations.getContent().s
 accountHistoryDTO.setAccountOperationDTOS(accountOperationDTOS);
 accountHistoryDTO.setAccountId(bankAccount.getId());
 accountHistoryDTO.setBalance(bankAccount.getBalance());
-accountHistoryDTO.setPageSize(page);
+accountHistoryDTO.setCurrentPage(page);
 accountHistoryDTO.setPageSize(size);
-accountHistoryDTO.setTotalPage(accountHistoryDTO.getTotalPage());
+accountHistoryDTO.setTotalPage(accountOperations.getTotalPages());
         return accountHistoryDTO;
     }
 
