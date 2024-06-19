@@ -44,6 +44,7 @@ Stream.of("Salah","Imane","Mohamed").forEach(name->{
   CustomerDTO customer=new CustomerDTO();
   customer.setName(name);
   customer.setEmail(name+"@gmail.com");
+
     bankAccountService.saveCustomer(customer);
 });
 bankAccountService.listCustomers().forEach(customer -> {
