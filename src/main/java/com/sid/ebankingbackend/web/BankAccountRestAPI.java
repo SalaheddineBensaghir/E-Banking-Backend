@@ -6,6 +6,7 @@ import com.sid.ebankingbackend.exception.BlanceNotSufficentException;
 import com.sid.ebankingbackend.services.BankAccountService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,4 +52,14 @@ public DebitDTO debit(@RequestBody DebitDTO debitDTO) throws BlanceNotSufficentE
         this.bankAccountService.transfer(transferRequestDTO.getAccountSource(),transferRequestDTO.getAccountDestination(),transferRequestDTO.getAmount());
 
     }
+//    @GetMapping("/customer/{customerId}")
+//    @PreAuthorize("hasAuthority('SCOPE_ROLE_USER')")
+//    public List<BankAccountDTO> bankAccountListCustomer(@PathVariable Long customerId) {
+//        return bankAccountService.getAccountsCustomer(customerId);
+//    }
+//    @GetMapping("/operations")
+//    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
+//    public List<AccountOperationDTO> accountOperations(){
+//        return bankAccountService.accountOperationsList();
+//    }
 }

@@ -1,13 +1,12 @@
 package com.sid.ebankingbackend.mappers;
 
-import com.sid.ebankingbackend.dtos.AccountOperationDTO;
-import com.sid.ebankingbackend.dtos.CurrentBankAccountDTO;
-import com.sid.ebankingbackend.dtos.CustomerDTO;
-import com.sid.ebankingbackend.dtos.SavingBankAccountDTO;
+import com.sid.ebankingbackend.dtos.*;
 import com.sid.ebankingbackend.entites.AccountOperation;
 import com.sid.ebankingbackend.entites.CurrentAccount;
 import com.sid.ebankingbackend.entites.Customer;
 import com.sid.ebankingbackend.entites.SavingAccount;
+import com.sid.ebankingbackend.securite.Response.UserResponse;
+import com.sid.ebankingbackend.securite.entitie.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +63,21 @@ return currentAccount;
                 accountOperation,accountOperationDTO
         );
         return accountOperationDTO;
+    }
+    public User fromUserDTO(UserDTO UserDTO){
+        User user = new User();
+        BeanUtils.copyProperties(UserDTO,user);
+        return user;
+    }
+    public UserDTO fromAppUser(User appUser){
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(appUser,userDTO);
+        return userDTO;
+    }
+    public UserResponse fromAppUserDTOResponse(UserDTO UserDTO){
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsername(UserDTO.getName());
+        userResponse.setEmail(UserDTO.getEmail());
+        return userResponse;
     }
 }

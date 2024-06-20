@@ -1,9 +1,13 @@
 package com.sid.ebankingbackend.securite;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.sid.ebankingbackend.securite.service.UserDetailServiceImpl;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,10 +38,19 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+
 public class SecurityConfig {
     @Value("${jwt.secret}")
 private String  secretKey;
-    @Bean
+
+    private UserDetailServiceImpl userDetailService;
+
+  //  private PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(@Lazy UserDetailServiceImpl userDetailsService) {
+        this.userDetailService = userDetailsService;
+    }
+   // @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(){
         return new InMemoryUserDetailsManager(
                 User.withUsername("user1").password(passwordEncoder().encode("1234")).authorities("USER").build(),
@@ -52,12 +65,14 @@ private String  secretKey;
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf->csrf.disable())
-                .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
+                .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**","/swagger-ui/**","/v3/api-docs/**").permitAll())
                 .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
               //  .httpBasic(Customizer.withDefaults() )
                 .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))
+             .userDetailsService(userDetailService)
                 .build();
+
     }
     @Bean
     JwtEncoder jwtEncoder(){

@@ -1,7 +1,12 @@
 package com.sid.ebankingbackend.securite;
 
 
+import com.sid.ebankingbackend.dtos.UserDTO;
+import com.sid.ebankingbackend.mappers.BankAccountMapperImpl;
+import com.sid.ebankingbackend.securite.Response.UserResponse;
+import com.sid.ebankingbackend.securite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,6 +31,8 @@ public class SecurityController {
     private AuthenticationManager authenticationManager;
    @Autowired
     private JwtEncoder jwtEncoder;
+    private UserService userService;
+    private BankAccountMapperImpl mapper;
     @GetMapping("/profile")
     public Authentication authentication(Authentication authentication){
         return  authentication;
@@ -48,5 +56,14 @@ org.springframework.security.core.Authentication authentication = authentication
             );
 String  jwt=jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
     return Map.of("access_token",jwt);
+    }
+    @GetMapping("/users")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
+    public List<UserResponse> getUsers(){
+        List<UserDTO> UserDTOS = userService.getUsers();
+        List<UserResponse> userResponses = UserDTOS.stream()
+                .map(userDTO -> mapper.fromAppUserDTOResponse(userDTO))
+                .toList();
+        return userResponses;
     }
 }

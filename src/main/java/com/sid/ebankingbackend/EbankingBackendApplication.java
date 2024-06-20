@@ -13,6 +13,7 @@ import com.sid.ebankingbackend.exception.CustomerNotFoundException;
 import com.sid.ebankingbackend.repositories.AccountOperationRepository;
 import com.sid.ebankingbackend.repositories.BankAccountRepository;
 import com.sid.ebankingbackend.repositories.CustomerRepository;
+import com.sid.ebankingbackend.securite.service.UserService;
 import com.sid.ebankingbackend.services.BankAccountService;
 import com.sid.ebankingbackend.services.BankService;
 import jakarta.transaction.Transactional;
@@ -37,7 +38,7 @@ public class EbankingBackendApplication {
         SpringApplication.run(EbankingBackendApplication.class, args);
 
     }
-    @Bean
+  //  @Bean
     CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
         return args -> {
 Stream.of("Salah","Imane","Mohamed").forEach(name->{
@@ -45,7 +46,7 @@ Stream.of("Salah","Imane","Mohamed").forEach(name->{
   customer.setName(name);
   customer.setEmail(name+"@gmail.com");
 
-    bankAccountService.saveCustomer(customer);
+   // bankAccountService.saveCustomer(customer);
 });
 bankAccountService.listCustomers().forEach(customer -> {
     try {
@@ -127,5 +128,20 @@ e.printStackTrace();
 
         };
     }
+//@Bean
+    CommandLineRunner commandLineRunnerUserDetails(UserService userService){
+        return args -> {
+            userService.addNewRole("USER");
+            userService.addNewRole("ADMIN");
+            userService.addNewUser("user1","1234","user1@gmail.com","1234");
+            userService.addNewUser("user2","1234","user2@gmail.com","1234");
+            userService.addNewUser("admin","1234","admin@gmail.com","1234");
+
+            userService.addRoleToUser("user1","USER");
+            userService.addRoleToUser("user2","USER");
+            userService.addRoleToUser("admin","USER");
+            userService.addRoleToUser("admin","ADMIN");
+        };
+}
 
 }

@@ -1,6 +1,7 @@
 package com.sid.ebankingbackend.entites;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sid.ebankingbackend.securite.entitie.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,5 +18,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<BankAccount> bankAccounts;
-
+    @ManyToOne
+    @JoinColumn(name = "user")
+    private User user;
 }

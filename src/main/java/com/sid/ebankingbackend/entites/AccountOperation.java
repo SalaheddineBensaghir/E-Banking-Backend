@@ -1,6 +1,7 @@
 package com.sid.ebankingbackend.entites;
 
 import com.sid.ebankingbackend.enums.OperationType;
+import com.sid.ebankingbackend.securite.entitie.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,9 @@ public class AccountOperation {
     private OperationType type;
 @ManyToOne
     private BankAccount bankAccount;
+    @ManyToOne
+    @JoinColumn(name = "user")
+    private User user;
 
 
 }

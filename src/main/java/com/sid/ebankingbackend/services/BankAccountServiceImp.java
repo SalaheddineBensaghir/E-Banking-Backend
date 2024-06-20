@@ -10,6 +10,8 @@ import com.sid.ebankingbackend.mappers.BankAccountMapperImpl;
 import com.sid.ebankingbackend.repositories.AccountOperationRepository;
 import com.sid.ebankingbackend.repositories.BankAccountRepository;
 import com.sid.ebankingbackend.repositories.CustomerRepository;
+import com.sid.ebankingbackend.securite.entitie.User;
+import com.sid.ebankingbackend.securite.repository.AppUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,15 +34,25 @@ public class BankAccountServiceImp implements BankAccountService{
     private BankAccountRepository bankAccountRepository;
     private AccountOperationRepository accountOperationRepository;
 private BankAccountMapperImpl dtoMapper;
+private AppUserRepository appUserRepository;
+private BankAccountMapperImpl mapper;
 
 
 
     @Override
-    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO,String username) {
        log.info("Saving new Customer");
-       Customer customer=dtoMapper.fromCustomersDTO(customerDTO);
-      Customer savedCustomer =  customerRepository.save(customer);
-        return dtoMapper.fromCustomer(savedCustomer);
+        User user = appUserRepository.findByUsername(username);
+        Customer customer = mapper.fromCustomersDTO(customerDTO);
+        customer.setUser(user);
+        Customer saveCustomer = customerRepository.save(customer);
+        CustomerDTO customerDTO1 = mapper.fromCustomer(saveCustomer);
+
+        return customerDTO1;
+
+//       Customer customer=dtoMapper.fromCustomersDTO(customerDTO);
+//      Customer savedCustomer =  customerRepository.save(customer);
+//        return dtoMapper.fromCustomer(savedCustomer);
     }
 
 
@@ -204,6 +216,14 @@ accountHistoryDTO.setTotalPage(accountOperations.getTotalPages());
         List<Customer> customers=customerRepository.searchCustomer(keyword);
        List<CustomerDTO> customerDTOS = customers.stream().map(cust->dtoMapper.fromCustomer(cust)).collect(Collectors.toList());
        return customerDTOS;
+    }
+
+    @Override
+    public BankAccountDTO saveAccount(BankAccountDTO bankAccountDTO) {
+        log.info("Saving new Account");
+        BankAccount bankAccount=dtoMapper.fromCurrentBankAccountDTO((CurrentBankAccountDTO) bankAccountDTO);
+        BankAccount savedAccount =  bankAccountRepository.save(bankAccount);
+        return dtoMapper.fromSavingBankAccount((SavingAccount) savedAccount);
     }
 
 }
